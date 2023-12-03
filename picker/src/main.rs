@@ -21,7 +21,6 @@ pub enum Language {
     Go,
     OCaml,
     Clojure,
-    Nim,
     Python,
     Dart,
 }
