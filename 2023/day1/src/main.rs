@@ -1,3 +1,5 @@
+// TODO: Part 2 not completed
+
 const INPUT: &str = include_str!("../input.txt");
 
 fn i_to_num(i: usize) -> usize {
