@@ -1,0 +1,8 @@
+{
+  "files.associations": {
+    "*.properties": "properties",
+    "*.h": "c",
+    "*.tcc": "cpp",
+    "fstream": "cpp"
+  }
+}
