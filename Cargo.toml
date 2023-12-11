@@ -1,3 +1,6 @@
 [workspace]
 members = ["2023/*", "picker"]
 resolver = "2"
+
+[profile.release]
+strip = true
