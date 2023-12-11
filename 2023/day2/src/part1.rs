@@ -7,20 +7,27 @@ struct CubeCount {
 
 impl CubeCount {
     fn from_str(round: &str) -> Self {
-        round.split(',').fold(CubeCount::default(), |acc, cubes| {
-            let mut acc = acc;
-            let (count, colour) = cubes.trim().split_once(' ').unwrap();
+        round
+            .split(',')
+            .fold(CubeCount::default(), |mut acc, cubes| {
+                let (count, colour) = cubes.trim().split_once(' ').unwrap();
 
-            let count = count.parse::<u8>().expect("valid integer");
-            match colour {
-                "red" => acc.red += count,
-                "green" => acc.green += count,
-                "blue" => acc.blue += count,
-                _ => unreachable!(),
-            }
+                let count = count.parse::<u8>().expect("valid integer");
+                match colour {
+                    "red" => acc.red += count,
+                    "green" => acc.green += count,
+                    "blue" => acc.blue += count,
+                    _ => unreachable!(),
+                }
 
-            acc
-        })
+                acc
+            })
+    }
+
+    fn impossible(&self, test_subject: Self) -> bool {
+        test_subject.red > self.red
+            || test_subject.blue > self.blue
+            || test_subject.green > self.green
     }
 }
 
@@ -70,14 +77,9 @@ pub fn run_part1(input: &str) -> usize {
                     .collect::<Vec<_>>(),
             )
         })
-        .filter(|(i, v)| {
-            if v.iter().any(|cubecount| ACTUAL_CUBES <= *cubecount) {
-                println!("Game {i} impossible");
-                false
-            } else {
-                println!("Game {i} possible");
-                true
-            }
+        .filter(|(_, v)| {
+            v.iter()
+                .any(|cubecount| ACTUAL_CUBES.impossible(*cubecount))
         })
         .map(|(i, _)| i)
         .sum::<usize>()
