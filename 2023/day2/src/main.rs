@@ -50,8 +50,8 @@ const ACTUAL_CUBES: CubeCount = CubeCount {
     blue: 14,
 };
 
-fn main() {
-    let games = INPUT
+fn sum_games(input: &str) -> usize {
+    input
         .lines()
         .map(|line| line.split_once(": ").unwrap().1)
         .map(|game| game.split(';').map(CubeCount::from_str).collect::<Vec<_>>())
@@ -59,7 +59,29 @@ fn main() {
         .map(|(i, v)| (i, v))
         .filter(|(_, v)| v.iter().any(|cubecount| ACTUAL_CUBES >= *cubecount))
         .map(|(i, _)| i + 1)
-        .sum::<usize>();
+        .sum::<usize>()
+}
+
+fn main() {
+    let games = sum_games(INPUT);
 
     println!("{games}");
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_example() {
+        let input = "Game 1: 3 blue, 4 red; 1 red, 2 green, 6 blue; 2 green
+Game 2: 1 blue, 2 green; 3 green, 4 blue, 1 red; 1 green, 1 blue
+Game 3: 8 green, 6 blue, 20 red; 5 blue, 4 red, 13 green; 5 green, 1 red
+Game 4: 1 green, 3 red, 6 blue; 3 green, 6 red; 3 green, 15 blue, 14 red
+Game 5: 6 red, 1 blue, 3 green; 2 blue, 1 red, 2 green";
+
+        let sum = sum_games(input);
+
+        assert_eq!(sum, 8);
+    }
 }
