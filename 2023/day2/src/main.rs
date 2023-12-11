@@ -1,3 +1,4 @@
+mod cubes;
 mod part1;
 
 const INPUT: &str = include_str!("../input.txt");
