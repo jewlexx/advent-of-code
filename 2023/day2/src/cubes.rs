@@ -1,8 +1,8 @@
 #[derive(Debug, Copy, Clone, Default, PartialEq, Eq)]
 pub struct CubeCount {
-    pub red: u8,
-    pub green: u8,
-    pub blue: u8,
+    pub red: usize,
+    pub green: usize,
+    pub blue: usize,
 }
 
 impl CubeCount {
@@ -12,7 +12,7 @@ impl CubeCount {
             .fold(CubeCount::default(), |mut acc, cubes| {
                 let (count, colour) = cubes.trim().split_once(' ').unwrap();
 
-                let count = count.parse::<u8>().expect("valid integer");
+                let count = count.parse::<usize>().expect("valid integer");
                 match colour {
                     "red" => acc.red += count,
                     "green" => acc.green += count,
@@ -28,6 +28,24 @@ impl CubeCount {
         test_subject.red > self.red
             || test_subject.blue > self.blue
             || test_subject.green > self.green
+    }
+
+    /// Merges with `other`, by replacing all elements of `self` where `other`'s counterparts are greater
+    pub fn merge(mut self, other: Self) -> Self {
+        if other.red > self.red {
+            self.red = other.red;
+        }
+        if other.green > self.green {
+            self.green = other.green;
+        }
+        if other.blue > self.blue {
+            self.blue = other.blue;
+        }
+        self
+    }
+
+    pub fn power(&self) -> usize {
+        self.red * self.green * self.blue
     }
 }
 
