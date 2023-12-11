@@ -54,10 +54,22 @@ const ACTUAL_CUBES: CubeCount = CubeCount {
 pub fn run_part1(input: &str) -> usize {
     input
         .lines()
-        .map(|line| line.split_once(": ").unwrap().1)
-        .map(|game| game.split(';').map(CubeCount::from_str).collect::<Vec<_>>())
-        .enumerate()
-        .map(|(i, v)| (i + 1, v))
+        .map(|line| {
+            let (game, rounds) = line.split_once(": ").unwrap();
+
+            let game_id = game["Game ".len()..].parse::<usize>().unwrap();
+
+            (game_id, rounds)
+        })
+        .map(|(game_id, rounds)| {
+            (
+                game_id,
+                rounds
+                    .split(';')
+                    .map(CubeCount::from_str)
+                    .collect::<Vec<_>>(),
+            )
+        })
         .filter(|(i, v)| {
             if v.iter().any(|cubecount| ACTUAL_CUBES <= *cubecount) {
                 println!("Game {i} impossible");
