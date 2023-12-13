@@ -7,33 +7,41 @@ const POSSIBLE_DIGITS: [&str; 18] = [
 ];
 
 #[derive(Debug, Copy, Clone)]
-struct EndOffset(isize, isize);
+pub struct EndOffset {
+    // TODO: The start might be pointless
+    pub start: isize,
+    pub end: isize,
+}
 
 impl EndOffset {
     /// The offsets to apply after recognizing each digit
     /// to ensure no digits are missed that have overlapping letters
     const END_OFFSETS: [EndOffset; 18] = [
         // Regular ascii digits
-        EndOffset(0, 0),
-        EndOffset(0, 0),
-        EndOffset(0, 0),
-        EndOffset(0, 0),
-        EndOffset(0, 0),
-        EndOffset(0, 0),
-        EndOffset(0, 0),
-        EndOffset(0, 0),
-        EndOffset(0, 0),
+        EndOffset::new(0, 0),
+        EndOffset::new(0, 0),
+        EndOffset::new(0, 0),
+        EndOffset::new(0, 0),
+        EndOffset::new(0, 0),
+        EndOffset::new(0, 0),
+        EndOffset::new(0, 0),
+        EndOffset::new(0, 0),
+        EndOffset::new(0, 0),
         // Numbers as words
-        EndOffset(0, -1),
-        EndOffset(0, -1),
-        EndOffset(0, -1),
-        EndOffset(0, 0),
-        EndOffset(0, -1),
-        EndOffset(0, 0),
-        EndOffset(0, 0),
-        EndOffset(1, -1),
-        EndOffset(0, -1),
+        EndOffset::new(0, -1),
+        EndOffset::new(0, -1),
+        EndOffset::new(0, -1),
+        EndOffset::new(0, 0),
+        EndOffset::new(0, -1),
+        EndOffset::new(0, 0),
+        EndOffset::new(0, 0),
+        EndOffset::new(1, -1),
+        EndOffset::new(0, -1),
     ];
+
+    pub const fn new(start: isize, end: isize) -> Self {
+        Self { start, end }
+    }
 
     pub const fn get(i: usize) -> Self {
         Self::END_OFFSETS[i]
