@@ -89,7 +89,10 @@ pub fn find_digits_in_line(line: &str) -> Vec<usize> {
     let mut found_digits = POSSIBLE_DIGITS
         .into_iter()
         .enumerate()
-        .filter_map(|(i, digit)| line.find(digit).map(|pos| ((i % 9) + 1, pos)))
+        .flat_map(|(i, digit)| {
+            line.match_indices(digit)
+                .map(move |(pos, _)| ((i % 9) + 1, pos))
+        })
         .collect::<Vec<(usize, usize)>>();
 
     found_digits.sort_by_key(|(_, i)| *i);
