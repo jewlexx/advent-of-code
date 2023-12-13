@@ -1,6 +1,6 @@
 use crate::cubes::*;
 
-pub fn run_part2(input: &str) -> usize {
+pub fn run(input: &str) -> usize {
     input
         .lines()
         .map(|line| line.split_once(": ").unwrap().1)
@@ -27,7 +27,7 @@ Game 3: 8 green, 6 blue, 20 red; 5 blue, 4 red, 13 green; 5 green, 1 red
 Game 4: 1 green, 3 red, 6 blue; 3 green, 6 red; 3 green, 15 blue, 14 red
 Game 5: 6 red, 1 blue, 3 green; 2 blue, 1 red, 2 green";
 
-        let sum = run_part2(input);
+        let sum = run(input);
 
         assert_eq!(sum, 2286);
     }

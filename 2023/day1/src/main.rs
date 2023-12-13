@@ -1,5 +1,3 @@
-// TODO: Part 2 not completed
-
 const INPUT: &str = include_str!("../input.txt");
 
 mod part1;
