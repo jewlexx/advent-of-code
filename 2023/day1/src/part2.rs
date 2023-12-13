@@ -6,82 +6,6 @@ const POSSIBLE_DIGITS: [&str; 18] = [
     "one", "two", "three", "four", "five", "six", "seven", "eight", "nine",
 ];
 
-#[derive(Debug, Copy, Clone)]
-pub struct EndOffset {
-    // TODO: The start might be pointless
-    pub start: isize,
-    pub end: isize,
-}
-
-impl EndOffset {
-    /// The offsets to apply after recognizing each digit
-    /// to ensure no digits are missed that have overlapping letters
-    const END_OFFSETS: [EndOffset; 18] = [
-        // Regular ascii digits
-        EndOffset::new(0, 0),
-        EndOffset::new(0, 0),
-        EndOffset::new(0, 0),
-        EndOffset::new(0, 0),
-        EndOffset::new(0, 0),
-        EndOffset::new(0, 0),
-        EndOffset::new(0, 0),
-        EndOffset::new(0, 0),
-        EndOffset::new(0, 0),
-        // Numbers as words
-        EndOffset::new(0, -1),
-        EndOffset::new(0, -1),
-        EndOffset::new(0, -1),
-        EndOffset::new(0, 0),
-        EndOffset::new(0, -1),
-        EndOffset::new(0, 0),
-        EndOffset::new(0, 0),
-        EndOffset::new(1, -1),
-        EndOffset::new(0, -1),
-    ];
-
-    pub const fn new(start: isize, end: isize) -> Self {
-        Self { start, end }
-    }
-
-    pub const fn get(i: usize) -> Self {
-        Self::END_OFFSETS[i]
-    }
-
-    pub fn apply(self, length: usize) -> usize {
-        let mut length = length as isize;
-        length += self.end;
-
-        length as usize
-    }
-}
-
-pub fn str_to_digit(str: &str) -> Option<(usize, EndOffset)> {
-    POSSIBLE_DIGITS
-        .iter()
-        .position(|s| *s == str)
-        .map(|i| ((i % 9) + 1, EndOffset::get(i)))
-}
-
-// This does not consider digits that are substrings
-pub fn find_digits_in_line_old(line: &str) -> Vec<usize> {
-    let chars = line.chars();
-
-    let mut current_string = String::new();
-    let mut found_digits = vec![];
-
-    for c in chars {
-        current_string.push(c);
-
-        if let Some((digit, end_offset)) = str_to_digit(&current_string) {
-            found_digits.push(digit);
-            let new_start = end_offset.apply(current_string.len());
-            current_string = String::from(&current_string[new_start..]);
-        }
-    }
-
-    found_digits
-}
-
 pub fn find_digits_in_line(line: &str) -> Vec<usize> {
     // Obviously this solution is not super optimized
     // There are obvious improvements to be made where we could filter all digits that are longer than the string we have available
@@ -132,7 +56,86 @@ zoneight234
     }
 
     #[test]
+    #[allow(unused)]
     fn test_str_to_digit() {
+        // This ended up not being used but I wanted to keep it sue me
+
+        #[derive(Debug, Copy, Clone)]
+        pub struct EndOffset {
+            // TODO: The start might be pointless
+            pub start: isize,
+            pub end: isize,
+        }
+
+        impl EndOffset {
+            /// The offsets to apply after recognizing each digit
+            /// to ensure no digits are missed that have overlapping letters
+            const END_OFFSETS: [EndOffset; 18] = [
+                // Regular ascii digits
+                EndOffset::new(0, 0),
+                EndOffset::new(0, 0),
+                EndOffset::new(0, 0),
+                EndOffset::new(0, 0),
+                EndOffset::new(0, 0),
+                EndOffset::new(0, 0),
+                EndOffset::new(0, 0),
+                EndOffset::new(0, 0),
+                EndOffset::new(0, 0),
+                // Numbers as words
+                EndOffset::new(0, -1),
+                EndOffset::new(0, -1),
+                EndOffset::new(0, -1),
+                EndOffset::new(0, 0),
+                EndOffset::new(0, -1),
+                EndOffset::new(0, 0),
+                EndOffset::new(0, 0),
+                EndOffset::new(1, -1),
+                EndOffset::new(0, -1),
+            ];
+
+            pub const fn new(start: isize, end: isize) -> Self {
+                Self { start, end }
+            }
+
+            pub const fn get(i: usize) -> Self {
+                Self::END_OFFSETS[i]
+            }
+
+            pub fn apply(self, length: usize) -> usize {
+                let mut length = length as isize;
+                length += self.end;
+
+                length as usize
+            }
+        }
+
+        pub fn str_to_digit(str: &str) -> Option<(usize, EndOffset)> {
+            POSSIBLE_DIGITS
+                .iter()
+                .position(|s| *s == str)
+                .map(|i| ((i % 9) + 1, EndOffset::get(i)))
+        }
+
+        // This does not consider digits that are substrings
+        pub fn find_digits_in_line_old(line: &str) -> Vec<usize> {
+            let chars = line.chars();
+
+            let mut current_string = String::new();
+            let mut found_digits = vec![];
+
+            for c in chars {
+                current_string.push(c);
+
+                if let Some((digit, end_offset)) = str_to_digit(&current_string) {
+                    found_digits.push(digit);
+                    let new_start = end_offset.apply(current_string.len());
+                    current_string = String::from(&current_string[new_start..]);
+                }
+            }
+
+            found_digits
+        }
+
         for (i, digit) in POSSIBLE_DIGITS.into_iter().enumerate() {
             // Find the actual number, from the index
             let number = (i % 9) + 1;
