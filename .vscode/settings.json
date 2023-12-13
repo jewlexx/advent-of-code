@@ -4,5 +4,6 @@
     "*.h": "c",
     "*.tcc": "cpp",
     "fstream": "cpp"
-  }
+  },
+  "rust-analyzer.showUnlinkedFileNotification": false
 }

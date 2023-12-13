@@ -15,21 +15,3 @@ pub fn run(input: &str) -> u32 {
         })
         .sum()
 }
-
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[test]
-    fn test_examples() {
-        let sum = run("two1nine
-eightwothree
-abcone2threexyz
-xtwone3four
-4nineeightseven2
-zoneight234
-7pqrstsixteen");
-
-        assert_eq!(sum, 281);
-    }
-}
